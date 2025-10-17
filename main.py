@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 from supabase import create_client, Client
+from routes import auth  # Import auth router
 
 # Load environment variables
 load_dotenv()
@@ -14,8 +15,8 @@ supabase: Client = create_client(supabase_url, supabase_key) if supabase_url and
 
 app = FastAPI(
     title="Fashion App API",
-    description="Backend API for wardrobe management and virtual try-on",
-    version="0.1.0"
+    description="Backend API for wardrobe management, virtual try-on, and AI-powered fashion recommendations",
+    version="0.2.0"
 )
 
 # CORS middleware - allow frontend to communicate with backend
@@ -26,6 +27,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(auth.router)
 
 @app.get("/")
 async def root():
